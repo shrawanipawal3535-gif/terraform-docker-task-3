@@ -2,22 +2,23 @@ terraform {
   required_providers {
     docker = {
       source  = "kreuzwerker/docker"
-      version = "~> 3.0.1"
+      version = "~> 3.0"
     }
   }
 }
-provider "docker" {
-  host = "unix:///var/run/docker.sock" 
-}
+
+provider "docker" {}
+
 resource "docker_image" "nginx" {
-  name         = "nginx:latest"
-  keep_locally = false
+  name = "nginx:latest"
 }
+
 resource "docker_container" "nginx" {
+  name  = "terraform-nginx"
   image = docker_image.nginx.image_id
-  name  = "terraform-task-container"
+
   ports {
     internal = 80
-    external = 8000
+    external = 8081
   }
 }
